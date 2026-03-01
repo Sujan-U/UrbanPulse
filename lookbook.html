@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lookbook – Urban Pulse Apparel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/products.js"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/cart.js" defer></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  body { 
+    font-family: 'Inter', sans-serif; 
+    padding-top: 80px; /* Prevents fixed header from covering content */
+    min-height: 100vh; /* Ensures footer stays at bottom if needed */
+  }
+
+  /* Optional: Make header shadow more visible when scrolling */
+  header {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+    .masonry {
+      column-count: 1;
+      column-gap: 1.5rem;
+    }
+    .masonry-item {
+      break-inside: avoid;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .masonry-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (min-width: 640px) { .masonry { column-count: 2; } }
+    @media (min-width: 1024px) { .masonry { column-count: 3; } }
+
+    .look-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .look-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+
+  <div id="header"></div>
+
+  <main class="max-w-7xl mx-auto px-6 py-16">
+    <div class="text-center mb-16">
+      <h1 class="text-5xl md:text-6xl font-black tracking-tighter">Lookbook</h1>
+      <p class="text-xl md:text-2xl text-zinc-400 mt-4">Curated fits. Real streets. Sydney energy.</p>
+    </div>
+
+    <div class="masonry">
+      <!-- Masonry cards with fade-in animation -->
+      <div class="masonry-item look-card">
+        <img src="assets/images/hero1.jpg" alt="Campus Runway look" class="w-full rounded-3xl shadow-2xl mb-4" loading="lazy">
+        <div class="bg-zinc-900 rounded-2xl p-6">
+          <h3 class="font-bold text-xl mb-2">Campus Runway</h3>
+          <p class="text-zinc-400 mb-4">Oversized hoodie + cargo joggers + dad cap</p>
+          <a href="shop.html?category=hoodies" class="text-lime-400 hover:text-lime-300 font-medium">Shop this look →</a>
+        </div>
+      </div>
+
+      <div class="masonry-item look-card">
+        <img src="assets/images/hero2.jpg" alt="Night Moves look" class="w-full rounded-3xl shadow-2xl mb-4" loading="lazy">
+        <div class="bg-zinc-900 rounded-2xl p-6">
+          <h3 class="font-bold text-xl mb-2">Night Moves</h3>
+          <p class="text-zinc-400 mb-4">Graphic tee + slim jeans + track jacket</p>
+          <a href="shop.html?category=tees" class="text-lime-400 hover:text-lime-300 font-medium">Shop this look →</a>
+        </div>
+      </div>
+
+      <div class="masonry-item look-card">
+        <img src="assets/images/hero3.jpg" alt="Weekend Vibe look" class="w-full rounded-3xl shadow-2xl mb-4" loading="lazy">
+        <div class="bg-zinc-900 rounded-2xl p-6">
+          <h3 class="font-bold text-xl mb-2">Weekend Vibe</h3>
+          <p class="text-zinc-400 mb-4">Crewneck + sweatpants + bucket hat</p>
+          <a href="shop.html?category=accessories" class="text-lime-400 hover:text-lime-300 font-medium">Shop this look →</a>
+        </div>
+      </div>
+
+      <div class="masonry-item look-card">
+        <img src="assets/images/hero4.jpg" alt="Bold Drop look" class="w-full rounded-3xl shadow-2xl mb-4" loading="lazy">
+        <div class="bg-zinc-900 rounded-2xl p-6">
+          <h3 class="font-bold text-xl mb-2">Bold Drop</h3>
+          <p class="text-zinc-400 mb-4">Red Pulse hoodie + navy cargos</p>
+          <a href="shop.html?category=hoodies" class="text-lime-400 hover:text-lime-300 font-medium">Shop this look →</a>
+        </div>
+      </div>
+
+      <!-- Add more cards here as needed – copy the pattern above -->
+    </div>
+
+    <div class="text-center mt-20">
+      <p class="text-xl text-zinc-400 mb-6">Want to be featured? Tag us on Instagram @urbanpulseapparel</p>
+      <a href="https://instagram.com/urbanpulseapparel" target="_blank" class="inline-block bg-lime-400 hover:bg-lime-300 text-black font-bold px-10 py-5 rounded-2xl text-xl transition duration-300">
+        Follow on Instagram
+      </a>
+    </div>
+  </main>
+
+  <!-- Fade-in animation for masonry items -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const items = document.querySelectorAll('.masonry-item');
+      items.forEach((item, index) => {
+        setTimeout(() => {
+          item.classList.add('visible');
+        }, index * 150); // staggered fade-in
+      });
+    });
+  </script>
+
+</body>
+</html>

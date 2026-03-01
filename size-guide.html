@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Size Guide – Urban Pulse Apparel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/products.js"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/cart.js" defer></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+
+    /* Table improvements */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 1.25rem 1.5rem;
+      text-align: left;
+    }
+    th {
+      background: #18181b;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    tr:nth-child(even) {
+      background: rgba(39, 39, 42, 0.3);
+    }
+    tr:hover {
+      background: rgba(63, 63, 70, 0.4);
+    }
+
+    /* Scroll hint on mobile */
+    .table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .scroll-hint {
+      display: none;
+      color: #a1a1aa;
+      font-size: 0.875rem;
+      text-align: center;
+      margin-top: 0.75rem;
+    }
+    @media (max-width: 767px) {
+      .scroll-hint { display: block; }
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+
+  <div id="header"></div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h1 class="text-4xl md:text-5xl font-black text-center mb-12 tracking-tight">Size Guide</h1>
+
+    <div class="bg-zinc-900 rounded-3xl p-6 md:p-12 border border-zinc-800">
+      <p class="text-center text-xl md:text-2xl text-zinc-300 mb-10 md:mb-12 leading-relaxed max-w-4xl mx-auto">
+        Our fits are relaxed and street-inspired. If you're between sizes, we recommend sizing up for that signature oversized look.
+      </p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr class="border-b-2 border-zinc-700 bg-zinc-800/50">
+              <th class="py-5 px-6 font-bold text-lg">Size</th>
+              <th class="py-5 px-6 font-bold text-lg">Chest (cm)</th>
+              <th class="py-5 px-6 font-bold text-lg">Waist (cm)</th>
+              <th class="py-5 px-6 font-bold text-lg">Length (cm)</th>
+              <th class="py-5 px-6 font-bold text-lg">Fit Notes</th>
+            </tr>
+          </thead>
+          <tbody class="text-zinc-300">
+            <tr class="border-b border-zinc-800 hover:bg-zinc-800/30 transition">
+              <td class="py-5 px-6 font-medium">S</td>
+              <td class="py-5 px-6">100–106</td>
+              <td class="py-5 px-6">76–82</td>
+              <td class="py-5 px-6">68–70</td>
+              <td class="py-5 px-6">Regular / true to size</td>
+            </tr>
+            <tr class="border-b border-zinc-800 bg-zinc-800/20">
+              <td class="py-5 px-6 font-medium">M</td>
+              <td class="py-5 px-6">106–112</td>
+              <td class="py-5 px-6">82–88</td>
+              <td class="py-5 px-6">70–72</td>
+              <td class="py-5 px-6">Most popular fit – balanced relaxed</td>
+            </tr>
+            <tr class="border-b border-zinc-800 hover:bg-zinc-800/30 transition">
+              <td class="py-5 px-6 font-medium">L</td>
+              <td class="py-5 px-6">112–118</td>
+              <td class="py-5 px-6">88–94</td>
+              <td class="py-5 px-6">72–74</td>
+              <td class="py-5 px-6">Relaxed / slightly oversized</td>
+            </tr>
+            <tr class="border-b border-zinc-800 bg-zinc-800/20">
+              <td class="py-5 px-6 font-medium">XL</td>
+              <td class="py-5 px-6">118–124</td>
+              <td class="py-5 px-6">94–100</td>
+              <td class="py-5 px-6">74–76</td>
+              <td class="py-5 px-6">Oversized street fit – popular for layering</td>
+            </tr>
+            <tr class="hover:bg-zinc-800/30 transition">
+              <td class="py-5 px-6 font-medium">XXL</td>
+              <td class="py-5 px-6">124–130</td>
+              <td class="py-5 px-6">100–106</td>
+              <td class="py-5 px-6">76–78</td>
+              <td class="py-5 px-6">Extra relaxed (limited stock)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scroll-hint text-center text-zinc-500 mt-4 text-sm">
+        Scroll horizontally → for full table view on mobile
+      </div>
+
+      <div class="mt-12 text-zinc-300 text-center space-y-6 max-w-3xl mx-auto">
+        <p class="text-lg">
+          Model is 183 cm / 6'0" wearing size M in most photos.
+        </p>
+        <p class="text-lg">
+          Measurements are approximate ±2 cm due to relaxed/street cut.
+        </p>
+        <p class="text-lg mt-8">
+          Still unsure? Send us your height, weight & preferred fit via our 
+          <a href="contact.html" class="text-lime-400 hover:underline font-medium">contact form</a> — we'll give personalized advice within 24 hours.
+        </p>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

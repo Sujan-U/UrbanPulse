@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us – Urban Pulse Apparel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/products.js"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/cart.js" defer></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  body { 
+    font-family: 'Inter', sans-serif; 
+    padding-top: 80px; /* Prevents fixed header from covering content */
+    min-height: 100vh; /* Ensures footer stays at bottom if needed */
+  }
+
+  /* Optional: Make header shadow more visible when scrolling */
+  header {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+    /* Fade-in animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Hero image overlay for future text if needed */
+    .hero-overlay {
+      background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+
+  <div id="header"></div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <section class="text-center fade-in">
+      <h1 class="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-6">Urban Pulse</h1>
+      <p class="text-2xl md:text-3xl text-zinc-300 max-w-4xl mx-auto leading-relaxed">
+        Sydney-born streetwear for the everyday hustle.
+      </p>
+    </section>
+
+    <div class="mt-12 md:mt-16 fade-in">
+      <img src="assets/images/hero2.jpg" alt="Pulse team & Sydney street lifestyle" 
+           class="w-full rounded-3xl shadow-2xl object-cover hero-overlay" loading="lazy">
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-12 lg:gap-16 mt-16 fade-in">
+      <div class="space-y-6">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">Our Story</h2>
+        <p class="text-zinc-300 leading-relaxed text-lg">
+          Founded in Sydney's Inner West, Urban Pulse started as a small project among friends who wanted clothing that felt authentic to city life — campus runs, late-night trains, beach-to-bar vibes.
+        </p>
+        <p class="text-zinc-300 leading-relaxed text-lg">
+          Today we design relaxed, high-quality pieces with subtle nods to Sydney's energy: skyline graphics, coastal tones, and durable fabrics built for real wear. Every drop is limited and intentional — no fast fashion, just pieces that last.
+        </p>
+      </div>
+
+      <div class="space-y-6">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">What Drives Us</h2>
+        <ul class="space-y-8 text-zinc-300 text-lg">
+          <li class="flex items-start gap-5">
+            <span class="text-4xl text-lime-400 flex-shrink-0">✓</span>
+            <div>
+              <strong class="block text-xl text-white mb-2">Quality First</strong>
+              Heavyweight cotton blends, reinforced stitching, fade-resistant prints — built to survive the streets.
+            </div>
+          </li>
+          <li class="flex items-start gap-5">
+            <span class="text-4xl text-lime-400 flex-shrink-0">✓</span>
+            <div>
+              <strong class="block text-xl text-white mb-2">Ethical Production</strong>
+              Fair wages, safe conditions — no shortcuts, no sweatshops.
+            </div>
+          </li>
+          <li class="flex items-start gap-5">
+            <span class="text-4xl text-lime-400 flex-shrink-0">✓</span>
+            <div>
+              <strong class="block text-xl text-white mb-2">Community Focus</strong>
+              Limited drops, real customer input, Sydney roots — we create for the people who live the lifestyle.
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <section class="text-center py-16 md:py-20 fade-in">
+      <h2 class="text-3xl md:text-4xl font-bold mb-6">Join the Pulse</h2>
+      <p class="text-xl text-zinc-400 mb-8 max-w-2xl mx-auto">
+        Follow us for exclusive drops, styling tips, behind-the-scenes, and real Sydney street stories.
+      </p>
+      <a href="https://instagram.com/urbanpulseapparel" target="_blank" 
+         class="inline-block bg-lime-400 hover:bg-lime-300 text-black font-bold px-10 py-5 rounded-2xl text-xl transition duration-300">
+        @urbanpulseapparel
+      </a>
+    </section>
+  </main>
+
+  <!-- Fade-in animation trigger -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.fade-in').forEach((el, index) => {
+        setTimeout(() => el.classList.add('visible'), 200 + index * 150);
+      });
+    });
+  </script>
+
+</body>
+</html>

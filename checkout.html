@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout – Urban Pulse</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/cart.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .step-active { @apply bg-lime-500 text-black font-bold; }
+    .step-inactive { @apply bg-zinc-700 text-zinc-400; }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+
+  <div id="header"></div>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-4xl md:text-5xl font-black text-center mb-12">Checkout</h1>
+
+    <!-- Steps indicator -->
+    <div class="flex justify-center mb-12">
+      <div class="flex items-center w-full max-w-md">
+        <div class="step step-active flex-1 h-2 rounded-l-full"></div>
+        <div class="step step-inactive flex-1 h-2"></div>
+        <div class="step step-inactive flex-1 h-2 rounded-r-full"></div>
+      </div>
+    </div>
+
+    <!-- Checkout content -->
+    <div id="checkout-content" class="space-y-12">
+      <!-- Step 1: Delivery Address -->
+      <section id="step-address" class="space-y-8">
+        <h2 class="text-3xl font-bold">1. Delivery Address</h2>
+        <form id="address-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-zinc-300 mb-2">Full Name</label>
+            <input type="text" name="fullName" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 focus:border-lime-400 outline-none">
+          </div>
+          <div>
+            <label class="block text-zinc-300 mb-2">Phone Number</label>
+            <input type="tel" name="phone" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 focus:border-lime-400 outline-none">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-zinc-300 mb-2">Street Address</label>
+            <input type="text" name="address" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 focus:border-lime-400 outline-none">
+          </div>
+          <div>
+            <label class="block text-zinc-300 mb-2">Suburb / City</label>
+            <input type="text" name="city" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 focus:border-lime-400 outline-none">
+          </div>
+          <div>
+            <label class="block text-zinc-300 mb-2">Postcode</label>
+            <input type="text" name="postcode" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 focus:border-lime-400 outline-none">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-zinc-300 mb-2">State</label>
+            <select name="state" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 focus:border-lime-400 outline-none">
+              <option value="">Select state</option>
+              <option value="NSW">New South Wales</option>
+              <option value="VIC">Victoria</option>
+              <option value="QLD">Queensland</option>
+              <option value="SA">South Australia</option>
+              <option value="WA">Western Australia</option>
+              <option value="TAS">Tasmania</option>
+              <option value="NT">Northern Territory</option>
+              <option value="ACT">Australian Capital Territory</option>
+            </select>
+          </div>
+        </form>
+
+        <div class="flex justify-end">
+          <button id="to-payment" class="bg-lime-500 hover:bg-lime-400 text-black font-bold px-10 py-5 rounded-2xl text-xl transition">
+            Continue to Payment →
+          </button>
+        </div>
+      </section>
+
+      <!-- Step 2: Payment (hidden initially) -->
+      <section id="step-payment" class="hidden space-y-8">
+        <h2 class="text-3xl font-bold">2. Payment Method</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <button class="payment-method-btn active bg-zinc-800 border-2 border-lime-500 p-6 rounded-2xl text-center hover:bg-zinc-700 transition">
+            <i class="fab fa-cc-visa text-4xl text-blue-500 mb-3"></i><br>
+            Visa
+          </button>
+          <button class="payment-method-btn bg-zinc-800 border-2 border-zinc-700 p-6 rounded-2xl text-center hover:bg-zinc-700 transition">
+            <i class="fab fa-cc-mastercard text-4xl text-red-500 mb-3"></i><br>
+            Mastercard
+          </button>
+          <button class="payment-method-btn bg-zinc-800 border-2 border-zinc-700 p-6 rounded-2xl text-center hover:bg-zinc-700 transition">
+            <i class="fab fa-cc-amex text-4xl text-blue-600 mb-3"></i><br>
+            Amex
+          </button>
+        </div>
+
+        <form id="payment-form" class="space-y-6">
+          <div>
+            <label class="block text-zinc-300 mb-2">Card Number</label>
+            <input type="text" name="cardNumber" maxlength="19" placeholder="1234 5678 9012 3456" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 focus:border-lime-400 outline-none">
+          </div>
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <label class="block text-zinc-300 mb-2">Expiry (MM/YY)</label>
+              <input type="text" name="expiry" maxlength="5" placeholder="MM/YY" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 focus:border-lime-400 outline-none">
+            </div>
+            <div>
+              <label class="block text-zinc-300 mb-2">CVC</label>
+              <input type="text" name="cvc" maxlength="4" placeholder="123" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 focus:border-lime-400 outline-none">
+            </div>
+          </div>
+          <div>
+            <label class="block text-zinc-300 mb-2">Cardholder Name</label>
+            <input type="text" name="cardName" required class="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-4 py-3 focus:border-lime-400 outline-none">
+          </div>
+        </form>
+
+        <div class="flex justify-between items-center">
+          <button id="back-to-address" class="text-zinc-400 hover:text-white transition">← Back to Address</button>
+          <button id="pay-now" class="bg-lime-500 hover:bg-lime-400 text-black font-bold px-12 py-5 rounded-2xl text-xl transition">
+            Pay Now – $<span id="total-amount">0.00</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Step 3: Success (hidden initially) -->
+      <section id="step-success" class="hidden text-center space-y-10 py-20">
+        <div class="text-7xl animate-bounce">🎉</div>
+        <h2 class="text-5xl font-black text-lime-400">Payment Successful!</h2>
+        <p class="text-2xl text-zinc-300">Thank you for your order</p>
+        <p class="text-xl text-zinc-400">Your UrbanPulse items are on the way.</p>
+
+        <div class="bg-zinc-900 rounded-2xl p-8 max-w-lg mx-auto">
+          <p class="text-lg mb-4">Order ID: <strong class="text-lime-400">#UP${Math.floor(Math.random()*1000000).toString().padStart(6,'0')}</strong></p>
+          <p class="text-lg">Estimated delivery: 3–5 business days</p>
+        </div>
+
+        <a href="index.html" class="inline-block bg-white text-black font-bold px-12 py-5 rounded-2xl text-xl hover:bg-zinc-200 transition">
+          Back to Shop
+        </a>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const cart = JSON.parse(localStorage.getItem('urbanPulseCart')) || [];
+      const total = cart.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0);
+      document.getElementById('total-amount').textContent = total.toFixed(2);
+
+      // Step navigation
+      const toPaymentBtn = document.getElementById('to-payment');
+      const backToAddressBtn = document.getElementById('back-to-address');
+      const payNowBtn = document.getElementById('pay-now');
+
+      toPaymentBtn?.addEventListener('click', () => {
+        document.getElementById('step-address').classList.add('hidden');
+        document.getElementById('step-payment').classList.remove('hidden');
+        document.querySelectorAll('.step')[1].classList.add('step-active');
+        document.querySelectorAll('.step')[1].classList.remove('step-inactive');
+      });
+
+      backToAddressBtn?.addEventListener('click', () => {
+        document.getElementById('step-payment').classList.add('hidden');
+        document.getElementById('step-address').classList.remove('hidden');
+        document.querySelectorAll('.step')[1].classList.remove('step-active');
+        document.querySelectorAll('.step')[1].classList.add('step-inactive');
+      });
+
+      payNowBtn?.addEventListener('click', () => {
+        // Simulate payment processing
+        setTimeout(() => {
+          document.getElementById('step-payment').classList.add('hidden');
+          document.getElementById('step-success').classList.remove('hidden');
+          document.querySelectorAll('.step')[2].classList.add('step-active');
+          document.querySelectorAll('.step')[2].classList.remove('step-inactive');
+
+          // Clear cart on success
+          localStorage.removeItem('urbanPulseCart');
+          window.dispatchEvent(new Event('cartUpdated'));
+        }, 1200);
+      });
+
+      // Simple card number formatting (spaces every 4 digits)
+      const cardInput = document.querySelector('input[name="cardNumber"]');
+      cardInput?.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        value = value.replace(/(\d{4})/g, '$1 ').trim();
+        e.target.value = value;
+      });
+
+      // Expiry formatting (MM/YY)
+      const expiryInput = document.querySelector('input[name="expiry"]');
+      expiryInput?.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 2) value = value.slice(0,2) + '/' + value.slice(2);
+        e.target.value = value;
+      });
+    });
+  </script>
+</body>
+</html>

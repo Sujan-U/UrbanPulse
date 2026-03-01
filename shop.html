@@ -1,0 +1,219 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop All – Urban Pulse Apparel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  body { 
+    font-family: 'Inter', sans-serif; 
+    padding-top: 80px; /* Prevents fixed header from covering content */
+    min-height: 100vh; /* Ensures footer stays at bottom if needed */
+  }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+
+  <div id="header"></div>
+
+  <main class="max-w-7xl mx-auto px-6 py-16">
+    <div class="flex flex-col lg:flex-row gap-10">
+
+      <aside class="w-full lg:w-64 space-y-8 lg:sticky lg:top-24 lg:self-start">
+        <div>
+          <h3 class="font-bold text-xl mb-4">Filters</h3>
+          <label class="block text-sm font-medium mb-2">Category</label>
+          <select id="categoryFilter" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:border-lime-400 outline-none transition">
+            <option value="">All Categories</option>
+            <option value="hoodies">Hoodies</option>
+            <option value="tees">Tees</option>
+            <option value="bottoms">Bottoms</option>
+            <option value="accessories">Accessories</option>
+            <option value="outerwear">Outerwear</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2">Sort By</label>
+          <select id="sortFilter" class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-white focus:border-lime-400 outline-none transition">
+            <option value="new">Newest</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+          </select>
+        </div>
+      </aside>
+
+      <div class="flex-1">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-6">
+          <h2 id="pageTitle" class="text-3xl md:text-4xl font-bold">All Products</h2>
+          <p id="resultCount" class="text-zinc-400 text-lg">
+            Showing <span id="shownCount">0</span> of <span id="totalCount">0</span>
+          </p>
+        </div>
+
+        <div id="shopProductGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8"></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.getElementById('shopProductGrid');
+    if (!grid) {
+      console.error("Grid element #shopProductGrid not found");
+      return;
+    }
+
+    if (!window.products || !Array.isArray(window.products)) {
+      grid.innerHTML = '<p class="col-span-full text-center text-xl text-zinc-400 py-16">No products loaded. Check js/products.js</p>';
+      return;
+    }
+
+    console.log("Products loaded in shop:", window.products.length);
+
+    let allProducts = [...window.products];
+
+    window.addToCartFromShop = function(productId) {
+      const product = window.products.find(p => p.id === productId);
+      if (!product) return showToast("Product not found");
+
+      const defaultColor = product.variants?.colors?.[0]?.name || null;
+      const defaultSize  = product.variants?.sizes?.[0] || null;
+      const defaultImage = product.variants?.colors?.[0]?.images?.[0] 
+                        || product.images?.[0] 
+                        || 'assets/images/fallback-no-image.jpg';
+
+      const item = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: 1,
+        color: defaultColor,
+        size: defaultSize,
+        image: defaultImage
+      };
+
+      if (typeof window.addToCart === 'function') {
+        window.addToCart(item);
+        showToast(`Added ${product.name} to bag!`);
+      } else {
+        console.error("addToCart not found");
+        alert("Added to bag (simulation)");
+      }
+    };
+
+    function renderProducts() {
+      let filtered = [...allProducts];
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchQuery = urlParams.get('search');
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase().trim();
+        filtered = filtered.filter(p => {
+          const text = [
+            p.name.toLowerCase(),
+            (p.description || '').toLowerCase(),
+            p.category.toLowerCase(),
+            ...(p.tags || []).map(tag => tag.toLowerCase())
+          ].join(' ');
+          return text.includes(q);
+        });
+
+        document.getElementById('pageTitle').textContent = `Results for "${searchQuery}"`;
+      }
+
+      const cat = document.getElementById('categoryFilter').value;
+      if (cat) filtered = filtered.filter(p => p.category === cat);
+
+      const sort = document.getElementById('sortFilter').value;
+      if (sort === 'price-low') filtered.sort((a, b) => a.price - b.price);
+      else if (sort === 'price-high') filtered.sort((a, b) => b.price - a.price);
+      else if (sort === 'new') filtered.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
+
+      grid.innerHTML = '';
+
+      const fragment = document.createDocumentFragment();
+
+      filtered.forEach(product => {
+        let mainImg = 'assets/images/fallback-no-image.jpg';
+
+        if (product.variants?.colors?.[0]?.images?.[0]) {
+          mainImg = product.variants.colors[0].images[0];
+        } else if (product.images?.[0]) {
+          mainImg = product.images[0];
+        }
+
+        console.log(`[Shop Final] Product ${product.id} (${product.name}): src = ${mainImg}`);
+
+        const card = document.createElement('div');
+        card.className = "group bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-all duration-300 shadow-lg hover:shadow-2xl relative";
+
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('button')) return;
+          window.location.href = `product.html?id=${product.id}`;
+        });
+
+        const img = document.createElement('img');
+        img.src = mainImg;
+        img.alt = product.name;
+        img.className = "w-full h-full object-cover group-hover:scale-105 transition-transform duration-500";
+        img.loading = "lazy";
+
+        const heartBtn = document.createElement('button');
+        heartBtn.innerHTML = window.wishlist?.includes(product.id) ? "❤️" : "♡";
+        heartBtn.className = "absolute top-4 right-4 text-3xl text-white drop-shadow-lg transition hover:scale-125 active:scale-110 z-10";
+        heartBtn.onclick = (e) => {
+          e.stopPropagation();
+          window.toggleWishlist(product.id);
+          heartBtn.innerHTML = window.wishlist?.includes(product.id) ? "❤️" : "♡";
+        };
+
+        const imageContainer = document.createElement('div');
+        imageContainer.className = "relative aspect-square overflow-hidden";
+        imageContainer.appendChild(img);
+        imageContainer.appendChild(heartBtn);
+        if (product.isNew) {
+          const badge = document.createElement('span');
+          badge.className = "absolute top-4 left-4 bg-lime-400 text-black text-xs font-bold px-2 py-1 rounded z-10";
+          badge.textContent = "NEW";
+          imageContainer.appendChild(badge);
+        }
+
+        const info = document.createElement('div');
+        info.className = "p-5";
+        info.innerHTML = `
+          <h3 class="font-bold text-lg mb-1">${product.name}</h3>
+          <p class="text-lime-400 font-semibold">$${product.price.toFixed(2)}</p>
+          <button 
+            onclick="event.stopPropagation(); window.addToCartFromShop(${product.id});"
+            class="mt-4 w-full bg-white text-black py-3 rounded-xl font-bold hover:bg-lime-400 transition duration-300"
+          >
+            Add to Bag
+          </button>
+        `;
+
+        card.appendChild(imageContainer);
+        card.appendChild(info);
+
+        fragment.appendChild(card);
+      });
+
+      grid.appendChild(fragment);
+
+      document.getElementById('shownCount').textContent = filtered.length;
+      document.getElementById('totalCount').textContent = allProducts.length;
+    }
+
+    renderProducts();
+
+    document.getElementById('categoryFilter').addEventListener('change', renderProducts);
+    document.getElementById('sortFilter').addEventListener('change', renderProducts);
+  });
+  </script>
+
+</body>
+</html>

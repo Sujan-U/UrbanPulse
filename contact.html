@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us – Urban Pulse Apparel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/products.js"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/cart.js" defer></script>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  body { 
+    font-family: 'Inter', sans-serif; 
+    padding-top: 80px; /* Prevents fixed header from covering content */
+    min-height: 100vh; /* Ensures footer stays at bottom if needed */
+  }
+
+  /* Optional: Make header shadow more visible when scrolling */
+  header {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Form input focus & error styles – using valid CSS */
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #a3e635;               /* lime-400 equivalent */
+    box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.3);   /* fake "ring" effect */
+  }
+
+  .error {
+    border-color: #ef4444 !important;    /* red-500 */
+    animation: shake 0.3s ease-in-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  .success-message {
+    background: rgba(163, 230, 53, 0.15);
+    border: 1px solid #a3e635;
+  }
+</style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+
+  <div id="header"></div>
+
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h1 class="text-4xl md:text-5xl font-black text-center mb-6 tracking-tight">Get in Touch</h1>
+    <p class="text-xl text-zinc-400 text-center mb-12 max-w-2xl mx-auto">
+      Questions about sizing, pre-orders, stock, or just want to say hi? We're here.
+    </p>
+
+    <form id="contactForm" class="space-y-6 max-w-lg mx-auto">
+      <!-- Honeypot spam trap (hidden from humans, bots fill it) -->
+      <input type="text" name="website" class="hidden" tabindex="-1" autocomplete="off">
+
+      <div>
+        <label for="name" class="block text-sm font-medium mb-2">Your Name</label>
+        <input type="text" id="name" name="name" required placeholder="Your Name" 
+               class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl px-6 py-5 text-lg focus:border-lime-400 transition duration-200">
+      </div>
+
+      <div>
+        <label for="email" class="block text-sm font-medium mb-2">Email Address</label>
+        <input type="email" id="email" name="email" required placeholder="Email Address" 
+               class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl px-6 py-5 text-lg focus:border-lime-400 transition duration-200">
+      </div>
+
+      <div>
+        <label for="phone" class="block text-sm font-medium mb-2">Phone (optional)</label>
+        <input type="tel" id="phone" name="phone" placeholder="Phone (optional)" 
+               class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl px-6 py-5 text-lg focus:border-lime-400 transition duration-200">
+      </div>
+
+      <div>
+        <label for="message" class="block text-sm font-medium mb-2">Your Message</label>
+        <textarea id="message" name="message" required rows="6" 
+                  placeholder="Your message (e.g. pre-order inquiry, sizing help, feedback...)" 
+                  class="w-full bg-zinc-900 border border-zinc-700 rounded-2xl px-6 py-5 text-lg focus:border-lime-400 transition duration-200 resize-y min-h-[140px]"></textarea>
+      </div>
+
+      <button type="submit" class="w-full bg-lime-400 hover:bg-lime-300 text-black font-bold py-6 rounded-2xl text-xl transition duration-300 shadow-lg">
+        Send Message
+      </button>
+    </form>
+
+    <div class="text-center mt-12 text-zinc-500">
+      <p>We'll reply within 24–48 hours (Sydney business hours)</p>
+      <p class="mt-2">hello@urbanpulse.com.au (placeholder – replace with real email)</p>
+    </div>
+  </main>
+
+  <!-- Form handling & validation -->
+  <script>
+    document.getElementById('contactForm')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      let valid = true;
+      const form = this;
+      const requiredFields = form.querySelectorAll('[required]');
+      const honeypot = form.querySelector('input[name="website"]');
+
+      // Honeypot check (spam bots usually fill hidden fields)
+      if (honeypot?.value.trim() !== '') {
+        showToast("Message blocked – suspicious activity detected.");
+        return;
+      }
+
+      // Validate required fields
+      requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+          field.classList.add('error');
+          valid = false;
+        } else {
+          field.classList.remove('error');
+        }
+      });
+
+      // Email format check
+      const email = document.getElementById('email');
+      if (email && email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+        email.classList.add('error');
+        valid = false;
+      }
+
+      if (valid) {
+        // Simulate success (replace with real fetch/Formspree/Netlify later)
+        showToast("Message sent successfully! We'll get back to you soon.");
+        form.reset();
+        form.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+      } else {
+        showToast("Please fill all required fields correctly.");
+      }
+    });
+
+    // Real-time blur validation (optional nice touch)
+    document.querySelectorAll('#contactForm input[required], #contactForm textarea[required]').forEach(field => {
+      field.addEventListener('blur', () => {
+        if (!field.value.trim()) {
+          field.classList.add('error');
+        } else {
+          field.classList.remove('error');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wishlist – Urban Pulse Apparel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/products.js"></script>
+  <script src="js/cart.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  body { 
+    font-family: 'Inter', sans-serif; 
+    padding-top: 80px; /* Prevents fixed header from covering content */
+    min-height: 100vh; /* Ensures footer stays at bottom if needed */
+  }
+
+  /*  Make header shadow more visible when scrolling */
+  header {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+</style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+
+  <div id="header"></div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+    <h1 class="text-4xl md:text-5xl font-black text-center mb-12 tracking-tight">Your Wishlist</h1>
+
+    <div id="wishlistItems" class="space-y-6 md:space-y-8"></div>
+
+    <div class="text-center mt-16 text-zinc-400">
+      <p class="text-xl">Keep adding pieces you love — we'll notify you on restocks (coming soon).</p>
+      <a href="shop.html" class="inline-block mt-6 bg-lime-400 hover:bg-lime-300 text-black font-bold px-10 py-5 rounded-2xl transition">
+        Continue Shopping
+      </a>
+    </div>
+  </main>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    window.addToCartFromShop = function(productId) {
+    const product = window.products.find(p => p.id === productId);
+    if (!product) {
+      showToast("Product not found");
+      return;
+    }
+
+    const defaultColor = product.variants?.colors?.[0]?.name || null;
+    const defaultSize  = product.variants?.sizes?.[0] || null;
+    const defaultImage = product.variants?.colors?.[0]?.images?.[0] 
+                      || product.images?.[0] 
+                      || 'assets/images/fallback-no-image.jpg';
+
+    const item = {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      color: defaultColor,
+      size: defaultSize,
+      image: defaultImage
+    };
+
+    if (typeof window.addToCart === 'function') {
+      window.addToCart(item);
+      showToast(`Added ${product.name} to bag!`);
+    } else {
+      console.error("addToCart function not found");
+      alert("Added to bag (simulation)");
+    }
+  };
+    const container = document.getElementById('wishlistItems');
+
+    function loadAndRenderWishlist() {
+      window.wishlist = JSON.parse(localStorage.getItem('urbanPulseWishlist')) || [];
+
+      container.innerHTML = '';
+
+      if (window.wishlist.length === 0) {
+        container.innerHTML = `
+          <p class="text-center text-xl md:text-2xl text-zinc-400 py-16">
+            Your wishlist is empty.<br>
+            <a href="shop.html" class="text-lime-400 hover:underline">Add some favourites →</a>
+          </p>
+        `;
+        return;
+      }
+
+      if (!window.products || !Array.isArray(window.products)) {
+        container.innerHTML = '<p class="text-center text-xl text-zinc-400 py-16">Products not loaded yet...</p>';
+        return;
+      }
+
+      const items = window.wishlist
+        .map(id => window.products.find(p => p.id === id))
+        .filter(p => p);
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <p class="text-center text-xl text-zinc-400 py-16">
+            No favourited items found.<br>
+            <a href="shop.html" class="text-lime-400 hover:underline">Browse shop →</a>
+          </p>
+        `;
+        return;
+      }
+
+      container.innerHTML = items.map(p => {
+        const mainImg = p.variants?.colors?.[0]?.images?.[0] 
+                     || p.images?.[0] 
+                     || 'assets/images/fallback-no-image.jpg';
+
+        return `
+          <div class="flex flex-col sm:flex-row gap-6 bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
+            <img src="${mainImg}" alt="${p.name}" class="w-full sm:w-32 h-32 object-cover rounded-xl" loading="lazy">
+            <div class="flex-1 space-y-4">
+              <div>
+                <h3 class="font-bold text-lg md:text-xl">${p.name}</h3>
+                <p class="text-lime-400 mt-1">$${p.price.toFixed(2)}</p>
+                <p class="text-zinc-400 text-sm mt-1">${p.description?.substring(0, 100) || ''}...</p>
+              </div>
+              <div class="flex flex-wrap gap-6">
+                <button onclick="window.addToCartFromShop(${p.id})" class="bg-white hover:bg-lime-400 text-black px-6 py-3 rounded-xl font-bold transition">
+                  Add to Bag
+                </button>
+                <button onclick="window.toggleWishlist(${p.id}); loadAndRenderWishlist()" class="text-red-400 hover:text-red-300 font-medium">
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      if (typeof window.updateCounts === 'function') window.updateCounts();
+    }
+
+    loadAndRenderWishlist();
+
+    window.addEventListener('wishlistUpdated', loadAndRenderWishlist);
+  });
+  </script>
+
+</body>
+</html>

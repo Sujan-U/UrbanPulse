@@ -1,0 +1,286 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product – Urban Pulse Apparel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="js/products.js"></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/cart.js" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  body { 
+    font-family: 'Inter', sans-serif; 
+    padding-top: 80px; /* Prevents fixed header from covering content */
+    min-height: 100vh; /* Ensures footer stays at bottom if needed */
+  }
+
+  /* Optional: Make header shadow more visible when scrolling */
+  header {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+    h1 { overflow-wrap: break-word; hyphens: auto; line-height: 1.1; }
+
+    .product-image-wrapper {
+      min-height: 50vh; background: #111827; border-radius: 1.5rem;
+      overflow: hidden; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      border: 1px solid rgba(75,85,99,0.3);
+    }
+
+    .product-hero { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; transition: transform 0.7s ease; }
+    .product-hero:hover { transform: scale(1.03); }
+
+    @media (min-width: 768px) { .product-image-wrapper { min-height: 60vh; } }
+    @media (max-width: 640px) { .product-image-wrapper { min-height: 45vh; } }
+
+    .color-swatch {
+      width: 44px; height: 44px; border-radius: 50%; border: 3px solid transparent;
+      transition: all 0.3s ease; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    .color-swatch.selected {
+      border-color: #a3e635; transform: scale(1.18); box-shadow: 0 0 0 4px rgba(163,230,83,0.3);
+    }
+    .color-swatch:hover:not(.selected) {
+      transform: scale(1.15); box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+    }
+
+    .size-btn.selected {
+      background: #a3e635; color: black; border-color: #a3e635; font-weight: bold;
+    }
+  </style>
+</head>
+<body class="bg-zinc-950 text-white min-h-screen">
+
+  <div id="header"></div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20">
+    <div id="productDetail" class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12"></div>
+  </main>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = parseInt(urlParams.get('id'));
+    const product = window.products.find(p => p.id === id);
+
+    if (!product) {
+      document.getElementById('productDetail').innerHTML = '<p class="text-center text-2xl py-20">Product not found</p>';
+      return;
+    }
+
+    console.log("Product loaded:", product.name, product.variants);
+
+    // Default values
+    let selectedColorObj = product.variants?.colors?.[0] || null;
+    let selectedSize = null;
+    const FALLBACK_IMG = 'assets/images/fallback-no-image.jpg';
+
+    // Collect all images for thumbnails
+    let allImages = [];
+    if (product.variants?.colors?.length) {
+      product.variants.colors.forEach(colorObj => {
+        if (colorObj.images?.length) allImages.push(...colorObj.images);
+      });
+    }
+    if (allImages.length === 0 && product.images?.length) {
+      allImages = product.images;
+    }
+
+    // Thumbnails HTML
+    let thumbnailsHTML = '';
+    if (allImages.length > 1) {
+      thumbnailsHTML = `
+        <div class="grid grid-cols-4 sm:grid-cols-5 gap-3 mt-6">
+          ${allImages.map((src, idx) => `
+            <button class="thumbnail-btn border-2 ${idx === 0 ? 'border-lime-400' : 'border-zinc-700'} rounded-xl overflow-hidden hover:border-lime-400 transition-all focus:outline-none focus:ring-2 focus:ring-lime-400" data-index="${idx}">
+              <img src="${src || FALLBACK_IMG}" alt="Thumbnail ${idx+1}" class="w-full h-20 object-cover">
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Color swatches
+    let colorSwatchesHTML = '';
+    if (product.variants?.colors?.length > 1) {
+      colorSwatchesHTML = `
+        <div class="mt-10">
+          <h3 class="font-semibold text-2xl mb-5">Color</h3>
+          <div class="flex flex-wrap gap-5" id="colorSwatches">
+            ${product.variants.colors.map((colorObj, i) => `
+              <button 
+                class="color-swatch ${i === 0 ? 'selected' : ''}" 
+                style="background-color: ${colorObj.hex || '#000000'};" 
+                data-color-index="${i}" 
+                title="${colorObj.name}"
+                aria-label="Select ${colorObj.name}"
+              ></button>
+            `).join('')}
+          </div>
+          <p class="mt-5 text-zinc-300 text-lg">
+            Selected: <span id="selectedColor" class="font-medium text-white">${selectedColorObj?.name || 'Default'}</span>
+          </p>
+        </div>
+      `;
+    }
+
+    // Size buttons
+    let sizeButtonsHTML = '';
+    if (product.variants?.sizes?.length > 0) {
+      sizeButtonsHTML = `
+        <div class="mt-10">
+          <h3 class="font-semibold text-2xl mb-5">Size</h3>
+          <div class="flex flex-wrap gap-3" id="sizeButtons">
+            ${product.variants.sizes.map(size => `
+              <button class="size-btn px-8 py-4 border border-zinc-600 rounded-xl hover:border-lime-400 transition text-lg font-medium ${size === selectedSize ? 'selected' : ''}" data-size="${size}">
+                ${size}
+              </button>
+            `).join('')}
+          </div>
+          <p class="mt-5 text-zinc-300 text-lg">
+            Selected: <span id="selectedSize" class="font-medium text-white">${selectedSize || 'None'}</span>
+          </p>
+        </div>
+      `;
+    }
+
+    // Build detail HTML
+    const initialMainSrc = selectedColorObj?.images?.[0] || product.images?.[0] || FALLBACK_IMG;
+    const initialSecSrc = selectedColorObj?.images?.[1] || product.images?.[1] || initialMainSrc;
+
+    const detailHTML = `
+      <div class="space-y-8">
+        <div class="product-image-wrapper flex items-center justify-center relative group">
+          <img id="mainProductImage" src="${initialMainSrc}" alt="${product.name}" class="product-hero" loading="lazy">
+          <img id="secondaryProductImage" src="${initialSecSrc}" alt="${product.name} alternate view" class="absolute inset-0 object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        </div>
+        ${thumbnailsHTML}
+        ${colorSwatchesHTML}
+        ${sizeButtonsHTML}
+      </div>
+
+      <div class="space-y-10">
+        <div>
+          <h1 class="text-5xl font-black leading-tight">${product.name}</h1>
+          <p class="text-4xl text-lime-400 font-bold mt-6">$${product.price.toFixed(2)}</p>
+          <div class="flex items-center gap-4 mt-4">
+            <span class="text-yellow-400 text-3xl">★★★★★</span>
+            <span class="text-zinc-400 text-xl">(${product.rating || '4.8'} • ${product.reviews || '100+'} reviews)</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-6">
+          <div class="flex items-center border border-zinc-700 rounded-xl overflow-hidden">
+            <button class="px-8 py-5 text-2xl font-bold" data-action="decrease">-</button>
+            <input type="number" id="quantity" value="1" min="1" class="w-24 text-center bg-transparent border-x border-zinc-700 py-5 text-2xl focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+            <button class="px-8 py-5 text-2xl font-bold" data-action="increase">+</button>
+          </div>
+          <button id="addToCartBtn" class="flex-1 bg-lime-400 hover:bg-lime-300 text-black font-bold py-6 rounded-2xl text-xl transition">
+            Add to Bag
+          </button>
+        </div>
+
+        <div class="pt-10 border-t border-zinc-800">
+          <p class="text-zinc-300 leading-relaxed text-lg">
+            ${product.description}
+          </p>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('productDetail').innerHTML = detailHTML;
+
+    // Get DOM elements
+    const mainImg = document.getElementById('mainProductImage');
+    const secImg = document.getElementById('secondaryProductImage');
+    const qtyInput = document.getElementById('quantity');
+
+    // Quantity controls
+    document.querySelectorAll('[data-action]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        let val = parseInt(qtyInput.value) || 1;
+        if (btn.dataset.action === 'decrease' && val > 1) val--;
+        if (btn.dataset.action === 'increase') val++;
+        qtyInput.value = val;
+      });
+    });
+
+    // Color selection
+    document.querySelectorAll('.color-swatch').forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+        swatch.classList.add('selected');
+
+        const idx = parseInt(swatch.dataset.colorIndex);
+        selectedColorObj = product.variants.colors[idx];
+
+        document.getElementById('selectedColor').textContent = selectedColorObj.name;
+
+        if (selectedColorObj?.images?.length) {
+          mainImg.src = selectedColorObj.images[0];
+          secImg.src = selectedColorObj.images[1] || selectedColorObj.images[0];
+        }
+      });
+    });
+
+    // Size selection
+    document.querySelectorAll('.size-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedSize = btn.dataset.size;
+        document.getElementById('selectedSize').textContent = selectedSize;
+      });
+    });
+
+    // Thumbnail selection
+    document.querySelectorAll('.thumbnail-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.index);
+        mainImg.src = allImages[idx] || FALLBACK_IMG;
+        secImg.src = allImages[idx + 1] || mainImg.src;
+
+        document.querySelectorAll('.thumbnail-btn').forEach(b => b.classList.remove('border-lime-400'));
+        btn.classList.add('border-lime-400');
+      });
+    });
+
+    // Add to cart
+    document.getElementById('addToCartBtn')?.addEventListener('click', () => {
+      if (product.variants?.colors?.length > 1 && !selectedColorObj) {
+        alert("Please select a color first");
+        return;
+      }
+      if (product.variants?.sizes?.length > 0 && !selectedSize) {
+        alert("Please select a size first");
+        return;
+      }
+
+      const qty = parseInt(qtyInput.value) || 1;
+
+      const cartItem = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        quantity: qty,
+        color: selectedColorObj?.name || null,
+        size: selectedSize || null,
+        image: selectedColorObj?.images?.[0] || product.images?.[0] || FALLBACK_IMG
+      };
+
+      if (typeof window.addToCart === 'function') {
+        window.addToCart(cartItem);
+        showToast(`Added ${qty} × ${product.name} (${cartItem.color || 'Default'} / ${cartItem.size || 'Default'})`);
+      } else {
+        console.error("addToCart function not found");
+        alert("Added to bag (simulation - addToCart missing)");
+      }
+    });
+  });
+  </script>
+
+</body>
+</html>
