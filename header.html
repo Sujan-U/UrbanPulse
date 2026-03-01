@@ -1,0 +1,60 @@
+﻿<header class="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-zinc-800">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="flex items-center justify-between h-20">
+
+      <!-- Logo -->
+      <a href="index.html" class="text-3xl font-black tracking-tight">
+        URBAN<span class="text-lime-400">PULSE</span>
+      </a>
+
+      <!-- Advanced Search with Clear Button -->
+      <div class="flex-1 max-w-xl mx-10 relative hidden md:block">
+        <input 
+          id="searchInput" 
+          type="text" 
+          placeholder="Search products..." 
+          class="w-full bg-zinc-900 border border-zinc-700 rounded-full px-6 py-3 text-white focus:border-lime-400 outline-none transition pr-12"
+        >
+        <button 
+          id="clearSearch" 
+          class="absolute right-5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white text-2xl font-bold hidden focus:outline-none transition-colors duration-200"
+          aria-label="Clear search"
+        >
+          ×
+        </button>
+        <div id="searchResults" class="absolute top-full left-0 right-0 mt-2 bg-zinc-900 border border-zinc-700 rounded-2xl shadow-2xl max-h-96 overflow-y-auto hidden z-50"></div>
+      </div>
+
+      <!-- Menu for big screens -->
+      <nav class="hidden lg:flex gap-10 text-lg">
+        <a href="shop.html" class="hover:text-lime-400">Shop</a>
+        <a href="lookbook.html" class="hover:text-lime-400">Lookbook</a>
+        <a href="about.html" class="hover:text-lime-400">About</a>
+        <a href="faq.html" class="hover:text-lime-400">FAQ</a>
+        <a href="contact.html" class="hover:text-lime-400">Contact</a>
+      </nav>
+
+      <!-- Icons + mobile button -->
+      <div class="flex items-center gap-6">
+        <button onclick="window.location.href='wishlist.html'" class="text-2xl hover:text-lime-400 transition relative">
+          ♡ <span id="wishlistCount" class="absolute -top-2 -right-2 bg-lime-400 text-black text-xs rounded-full w-5 h-5 flex items-center justify-center">0</span>
+        </button>
+        <a href="cart.html" class="text-2xl relative">
+          🛒 <span id="cartCount" class="absolute -top-2 -right-2 bg-lime-400 text-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+        </a>
+        <button id="openMenu" class="md:hidden text-3xl focus:outline-none">☰</button>
+      </div>
+
+    </div>
+  </div>
+</header>
+
+<!-- Mobile menu -->
+<div id="mobileMenu" class="fixed inset-0 bg-black z-50 flex flex-col items-center justify-center gap-12 text-3xl transform translate-x-full transition-transform duration-300 md:hidden">
+  <button id="closeMenu" class="absolute top-8 right-8 text-5xl">×</button>
+  <a href="shop.html" class="hover:text-lime-400">Shop</a>
+  <a href="lookbook.html" class="hover:text-lime-400">Lookbook</a>
+  <a href="about.html" class="hover:text-lime-400">About</a>
+  <a href="faq.html" class="hover:text-lime-400">FAQ</a>
+  <a href="contact.html" class="hover:text-lime-400">Contact</a>
+</div>
