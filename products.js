@@ -1,4 +1,4 @@
-﻿// js/products.js
+// js/products.js
 // Urban Pulse Apparel – Product Catalog
 // Last updated: February 2026
 
@@ -25,8 +25,8 @@ const products = [
           name: "Black",
           hex: "#000000",
           images: [
-            "assets/images/products/p1-model.jpg",
-            "assets/images/products/p1-front.jpg"
+            "p1-model.jpg",
+            "p1-front.jpg"
           ]
         }
       ],
@@ -55,16 +55,16 @@ const products = [
           name: "White",
           hex: "#ffffff",
           images: [
-            "assets/images/products/p2-white-model.jpg",
-            "assets/images/products/p2-white-front.jpg"
+            "p2-white-model.jpg",
+            "p2-white-front.jpg"
           ]
         },
         {
           name: "Red",
           hex: "#c8102e",
           images: [
-            "assets/images/products/p2-red-model.jpg",
-            "assets/images/products/p2-red-front.jpg"
+            "p2-red-model.jpg",
+            "p2-red-front.jpg"
           ]
         }
       ],
@@ -93,8 +93,8 @@ const products = [
           name: "Charcoal",
           hex: "#333333",
           images: [
-            "assets/images/products/p3-model.jpg",
-            "assets/images/products/p3-front.jpg"
+            "p3-model.jpg",
+            "p3-front.jpg"
           ]
         }
       ],
@@ -123,16 +123,16 @@ const products = [
           name: "Navy",
           hex: "#0a2342",
           images: [
-            "assets/images/products/p4-navy-model.jpg",
-            "assets/images/products/p4-navy-front.jpg"
+            "p4-navy-model.jpg",
+            "p4-navy-front.jpg"
           ]
         },
         {
           name: "Olive",
           hex: "#4a7043",
           images: [
-            "assets/images/products/p4-olive-model.jpg",
-            "assets/images/products/p4-olive-front.jpg"
+            "p4-olive-model.jpg",
+            "p4-olive-front.jpg"
           ]
         }
       ],
@@ -161,16 +161,16 @@ const products = [
           name: "Olive",
           hex: "#556b2f",
           images: [
-            "assets/images/products/p5-olive-model.jpg",
-            "assets/images/products/p5-olive-front.jpg"
+            "p5-olive-model.jpg",
+            "p5-olive-front.jpg"
           ]
         },
         {
           name: "Pink",
           hex: "#ff69b4",
           images: [
-            "assets/images/products/p5-pink-model.jpg",
-            "assets/images/products/p5-pink-front.jpg"
+            "p5-pink-model.jpg",
+            "p5-pink-front.jpg"
           ]
         }
       ],
@@ -199,8 +199,8 @@ const products = [
           name: "Black",
           hex: "#000000",
           images: [
-            "assets/images/products/p6-model.jpg",
-            "assets/images/products/p6-front.jpg"
+            "p6-model.jpg",
+            "p6-front.jpg"
           ]
         }
       ],
@@ -229,16 +229,16 @@ const products = [
           name: "White",
           hex: "#ffffff",
           images: [
-            "assets/images/products/p7-white-model.jpg",
-            "assets/images/products/p7-white-front.jpg"
+            "p7-white-model.jpg",
+            "p7-white-front.jpg"
           ]
         },
         {
           name: "Black",
           hex: "#000000",
           images: [
-            "assets/images/products/p7-black-model.jpg",
-            "assets/images/products/p7-black-front.jpg"
+            "p7-black-model.jpg",
+            "p7-black-front.jpg"
           ]
         }
       ],
@@ -267,8 +267,8 @@ const products = [
           name: "Grey",
           hex: "#4a4a4a",
           images: [
-            "assets/images/products/p8-model.jpg",
-            "assets/images/products/p8-front.jpg"
+            "p8-model.jpg",
+            "p8-front.jpg"
           ]
         }
       ],
@@ -297,16 +297,16 @@ const products = [
           name: "Beige",
           hex: "#d9c2a6",
           images: [
-            "assets/images/products/p9-beige-model.jpg",
-            "assets/images/products/p9-beige-front.jpg"
+            "p9-beige-model.jpg",
+            "p9-beige-front.jpg"
           ]
         },
         {
           name: "Grey",
           hex: "#808080",
           images: [
-            "assets/images/products/p9-grey-model.jpg",
-            "assets/images/products/p9-grey-front.jpg"
+            "p9-grey-model.jpg",
+            "p9-grey-front.jpg"
           ]
         }
       ],
@@ -335,8 +335,8 @@ const products = [
           name: "Black / Contrast",
           hex: "#000000",
           images: [
-            "assets/images/products/p10-model.jpg",
-            "assets/images/products/p10-front.jpg"
+            "p10-model.jpg",
+            "p10-front.jpg"
           ]
         }
       ],
@@ -365,8 +365,8 @@ const products = [
           name: "Red",
           hex: "#c8102e",
           images: [
-            "assets/images/products/p11-model.jpg",
-            "assets/images/products/p11-front.jpg"
+            "p11-model.jpg",
+            "p11-front.jpg"
           ]
         }
       ],
@@ -395,8 +395,8 @@ const products = [
           name: "Navy",
           hex: "#0a2342",
           images: [
-            "assets/images/products/p12-model.jpg",
-            "assets/images/products/p12-front.jpg"
+            "p12-model.jpg",
+            "p12-front.jpg"
           ]
         }
       ],
@@ -425,16 +425,16 @@ const products = [
           name: "Black",
           hex: "#000000",
           images: [
-            "assets/images/products/p13-black-model.jpg",
-            "assets/images/products/p13-black-front.jpg"
+            "p13-black-model.jpg",
+            "p13-black-front.jpg"
           ]
         },
         {
           name: "White",
           hex: "#ffffff",
           images: [
-            "assets/images/products/p13-white-model.jpg",
-            "assets/images/products/p13-white-front.jpg"
+            "p13-white-model.jpg",
+            "p13-white-front.jpg"
           ]
         }
       ],
