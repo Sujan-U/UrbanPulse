@@ -5,38 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Urban Pulse | Sydney Streetwear</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="products.js"></script>
-  <script src="main.js" defer></script>
-  <script src="cart.js" defer></script>
+  <!-- Use defer + correct paths (assuming files are in root/js/) -->
+  <script src="js/products.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/cart.js" defer></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-  body { 
-    font-family: 'Inter', sans-serif; 
-    padding-top: 80px; /* Prevents fixed header from covering content */
-    min-height: 100vh; /* Ensures footer stays at bottom if needed */
-  }
-
-  /* Optional: Make header shadow more visible when scrolling */
-  header {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  }
-
-    .hero-text { text-shadow: 0 8px 32px rgba(0,0,0,0.9); }
-
-    /* Fade-in + bounce animation */
+    body {
+      font-family: 'Inter', sans-serif;
+      padding-top: 80px;          /* space for fixed header */
+      min-height: 100vh;
+      background-color: #0a0a0a;  /* fallback if zinc-950 fails */
+    }
+    header {
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+    }
+    .hero-text {
+      text-shadow: 0 8px 32px rgba(0,0,0,0.9);
+    }
     @keyframes fadeInBounce {
       0%   { opacity: 0; transform: translateY(60px) scale(0.95); }
       60%  { opacity: 1; transform: translateY(-10px) scale(1.02); }
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
-
     .animate-hero {
       animation: fadeInBounce 0.75s cubic-bezier(0.17, 0.78, 0.32, 0.5) forwards;
     }
     .animation-delay-200 { animation-delay: 0.2s; }
     .animation-delay-400 { animation-delay: 0.4s; }
-
-    /* Button shine effect on hover */
     .btn-shine {
       position: relative;
       overflow: hidden;
@@ -44,70 +40,91 @@
     .btn-shine::after {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        135deg,
-        transparent 40%,
-        rgba(255,255,255,0.4) 50%,
-        transparent 60%
-      );
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.35) 50%, transparent 60%);
       transform: translateX(-100%) rotate(45deg);
       transition: transform 0.7s;
     }
     .btn-shine:hover::after {
       transform: translateX(100%) rotate(45deg);
     }
+    /* Fade-in utility for sections */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease-out;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
   </style>
 </head>
-<body class="bg-zinc-950 text-white">
+<body class="bg-zinc-950 text-white antialiased">
 
-  <div id="header"></div>
+  <!-- ====================================================
+       TEMPORARY VISIBLE HEADER FALLBACK
+       (remove once main.js reliably injects #header)
+  ==================================================== -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-black/70 backdrop-blur-lg border-b border-zinc-800/60">
+    <nav class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+      <a href="/" class="text-2xl md:text-3xl font-black tracking-tight hover:text-lime-400 transition">
+        URBAN PULSE
+      </a>
+      <div class="hidden md:flex items-center gap-8 text-sm uppercase tracking-wider font-medium">
+        <a href="shop.html" class="hover:text-lime-400 transition">Shop</a>
+        <a href="lookbook.html" class="hover:text-lime-400 transition">Lookbook</a>
+        <a href="about.html" class="hover:text-lime-400 transition">About</a>
+        <a href="faq.html" class="hover:text-lime-400 transition">FAQ</a>
+        <a href="contact.html" class="hover:text-lime-400 transition">Contact</a>
+      </div>
+      <!-- Mobile menu trigger (expand later if needed) -->
+      <button class="md:hidden text-2xl focus:outline-none">☰</button>
+    </nav>
+  </header>
 
-  <!-- HERO CAROUSEL with modern buttons -->
+  <!-- HERO CAROUSEL -->
   <section class="relative h-screen flex items-center justify-center overflow-hidden">
-    <!-- Carousel Background -->
+    <!-- Carousel container -->
     <div class="carousel absolute inset-0">
       <div class="carousel-inner flex transition-transform duration-1000 ease-in-out" id="heroCarousel">
-        <div class="carousel-item flex-shrink-0 w-full h-full"><img src="hero1.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-        <div class="carousel-item flex-shrink-0 w-full h-full"><img src="hero2.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-        <div class="carousel-item flex-shrink-0 w-full h-full"><img src="hero3.jpg" class="w-full h-full object-cover" loading="lazy"></div>
-        <div class="carousel-item flex-shrink-0 w-full h-full"><img src="hero4.jpg" class="w-full h-full object-cover" loading="lazy"></div>
+        <div class="carousel-item flex-shrink-0 w-full h-full">
+          <img src="assets/images/hero1.jpg" class="w-full h-full object-cover" alt="Urban Pulse hero 1" loading="eager">
+        </div>
+        <div class="carousel-item flex-shrink-0 w-full h-full">
+          <img src="assets/images/hero2.jpg" class="w-full h-full object-cover" alt="Urban Pulse hero 2" loading="lazy">
+        </div>
+        <div class="carousel-item flex-shrink-0 w-full h-full">
+          <img src="assets/images/hero3.jpg" class="w-full h-full object-cover" alt="Urban Pulse hero 3" loading="lazy">
+        </div>
+        <div class="carousel-item flex-shrink-0 w-full h-full">
+          <img src="assets/images/hero4.jpg" class="w-full h-full object-cover" alt="Urban Pulse hero 4" loading="lazy">
+        </div>
       </div>
     </div>
 
-    <!-- Overlay gradient -->
-    <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black/90"></div>
+    <!-- Gradient overlay -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-black/85"></div>
 
-    <!-- Content -->
-    <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+    <!-- Hero content -->
+    <div class="relative z-10 text-center px-5 sm:px-8 max-w-5xl mx-auto">
       <h1 class="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-[-0.05em] mb-6 animate-hero hero-text">
         PULSE
       </h1>
-
-      <p class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-zinc-200 mb-12 md:mb-16 animate-hero animation-delay-200 hero-text">
+      <p class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-medium text-zinc-200 mb-10 md:mb-16 animate-hero animation-delay-200 hero-text">
         Sydney Streetwear for the everyday hustle
       </p>
-
-      <div class="flex flex-col sm:flex-row gap-6 md:gap-8 justify-center items-center">
-        <!-- Shop Now Button -->
-        <a 
-          href="shop.html"
-          class="group relative inline-flex items-center justify-center gap-3 px-10 md:px-14 py-5 md:py-6 bg-black/40 backdrop-blur-xl border-2 border-lime-400/40 text-lime-400 font-bold text-xl md:text-2xl rounded-3xl shadow-2xl hover:shadow-lime-400/30 transition-all duration-500 hover:scale-105 active:scale-95 hover:border-lime-400 btn-shine overflow-hidden"
-        >
+      <div class="flex flex-col sm:flex-row gap-5 sm:gap-8 justify-center items-center">
+        <!-- Shop Now -->
+        <a href="shop.html" class="group relative inline-flex items-center justify-center gap-3 px-10 md:px-14 py-5 md:py-6 bg-black/40 backdrop-blur-xl border-2 border-lime-400/50 text-lime-400 font-bold text-xl md:text-2xl rounded-3xl shadow-xl hover:shadow-lime-500/20 transition-all duration-500 hover:scale-105 active:scale-95 hover:border-lime-400 btn-shine">
           <span class="relative z-10">Shop Now</span>
-          <svg class="w-7 h-7 relative z-10 transition-transform duration-400 group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+          <svg class="w-7 h-7 relative z-10 transition-transform duration-300 group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
           </svg>
         </a>
-
-        <!-- View Lookbook Button -->
-        <a 
-          href="lookbook.html"
-          class="group relative inline-flex items-center justify-center gap-3 px-10 md:px-14 py-5 md:py-6 bg-black/40 backdrop-blur-xl border-2 border-lime-400/40 text-lime-400 font-bold text-xl md:text-2xl rounded-3xl shadow-2xl hover:shadow-lime-400/30 transition-all duration-500 hover:scale-105 active:scale-95 hover:border-lime-400 btn-shine overflow-hidden"
-        >
+        <!-- View Lookbook -->
+        <a href="lookbook.html" class="group relative inline-flex items-center justify-center gap-3 px-10 md:px-14 py-5 md:py-6 bg-black/40 backdrop-blur-xl border-2 border-lime-400/50 text-lime-400 font-bold text-xl md:text-2xl rounded-3xl shadow-xl hover:shadow-lime-500/20 transition-all duration-500 hover:scale-105 active:scale-95 hover:border-lime-400 btn-shine">
           <svg class="w-7 h-7 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
             <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
@@ -119,120 +136,105 @@
   </section>
 
   <!-- New Arrivals -->
-  <section class="max-w-7xl mx-auto px-6 py-20 fade-in">
-    <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 tracking-tight">New Arrivals</h2>
+  <section class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-16 md:py-24 fade-in">
+    <h2 class="text-4xl md:text-5xl font-black text-center mb-12 md:mb-16 tracking-tight">New Arrivals</h2>
     <div id="newArrivalsGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8"></div>
   </section>
 
+  <!-- ====================================================
+       Inline JS – keep your logic but with small safety improvements
+  ==================================================== -->
   <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Fade-in sections
-    document.querySelectorAll('.fade-in').forEach((section, index) => {
-      setTimeout(() => section.classList.add('visible'), 300 + index * 200);
-    });
+    // Fade-in sections on scroll/view
+    const fadeSections = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    fadeSections.forEach(section => observer.observe(section));
 
     // Hero carousel auto-rotate
     const carouselInner = document.getElementById('heroCarousel');
     let currentHero = 0;
-    if (carouselInner) {
+    if (carouselInner?.children?.length > 1) {
       setInterval(() => {
-        currentHero = (currentHero + 1) % 4;
+        currentHero = (currentHero + 1) % carouselInner.children.length;
         carouselInner.style.transform = `translateX(-${currentHero * 100}%)`;
-      }, 6000);
+      }, 6500);
     }
 
-    // Helper: Add to cart from shop/index (uses default/first variant)
+    // Your addToCartFromShop helper (unchanged but safer)
     window.addToCartFromShop = function(productId) {
-      const product = window.products.find(p => p.id === productId);
-      if (!product) {
-        showToast("Product not found");
+      if (!window.products) {
+        console.warn("Products data not loaded yet");
         return;
       }
-
-      const defaultColor = product.variants?.colors?.[0]?.name || null;
-      const defaultSize  = product.variants?.sizes?.[0] || null;
-      const defaultImage = product.variants?.colors?.[0]?.images?.[0] 
-                        || product.images?.[0] 
-                        || 'assets/images/fallback-no-image.jpg';
-
+      const product = window.products.find(p => p.id === productId);
+      if (!product) {
+        showToast?.("Product not found") || alert("Product not found");
+        return;
+      }
+      const defaultVariant = product.variants?.colors?.[0] || {};
       const item = {
         id: product.id,
         name: product.name,
         price: product.price,
         quantity: 1,
-        color: defaultColor,
-        size: defaultSize,
-        image: defaultImage
+        color: defaultVariant.name || null,
+        size: product.variants?.sizes?.[0] || null,
+        image: defaultVariant.images?.[0] || product.images?.[0] || 'assets/images/fallback-no-image.jpg'
       };
-
       if (typeof window.addToCart === 'function') {
         window.addToCart(item);
-        showToast(`Added ${product.name} to bag!`);
+        showToast?.(`Added ${product.name} to bag!`) || alert(`Added ${product.name}`);
       } else {
-        console.error("addToCart function not found");
-        alert("Added to bag (simulation)");
+        console.warn("addToCart function missing – using fallback");
+        alert(`Added ${product.name} (simulation)`);
       }
     };
 
-    // Render New Arrivals
+    // Render New Arrivals (your logic kept + minor cleanup)
     function renderNewArrivals() {
       const grid = document.getElementById('newArrivalsGrid');
       if (!grid || !window.products) return;
-
       const newItems = window.products.filter(p => p.isNew || p.isFeatured).slice(0, 8);
-
       grid.innerHTML = '';
-
       newItems.forEach(p => {
-        const previewImg = p.variants?.colors?.[0]?.images?.[0] 
-                        || p.images?.[0] 
-                        || 'assets/images/fallback-no-image.jpg';
-
-        const isWishlisted = window.wishlist?.includes(p.id) || false;
-
+        const previewImg = p.variants?.colors?.[0]?.images?.[0] || p.images?.[0] || 'assets/images/fallback-no-image.jpg';
+        const isWishlisted = window.wishlist?.includes?.(p.id) ?? false;
         const card = document.createElement('div');
-        card.className = "group bg-zinc-900 rounded-3xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-all duration-300 shadow-lg hover:shadow-2xl relative";
-
-        // Make entire card clickable → go to product detail
+        card.className = "group bg-zinc-900/80 rounded-3xl overflow-hidden cursor-pointer hover:-translate-y-2 transition-all duration-300 shadow-lg hover:shadow-2xl backdrop-blur-sm border border-zinc-800/50";
         card.addEventListener('click', (e) => {
-          // Prevent redirect if clicking button
-          if (e.target.closest('button')) return;
+          if (e.target.closest('button, a')) return;
           window.location.href = `product.html?id=${p.id}`;
         });
-
         card.innerHTML = `
           <div class="relative aspect-square overflow-hidden">
-            <img 
-              src="${previewImg}"
-              alt="${p.name}"
-              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              loading="lazy"
-            >
-            <button 
-              onclick="event.stopPropagation(); window.toggleWishlist(${p.id});"
-              class="absolute top-4 right-4 text-3xl text-white drop-shadow-lg transition hover:scale-125 active:scale-110 z-10"
-            >
+            <img src="${previewImg}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+            <button onclick="event.stopPropagation(); window.toggleWishlist?.(${p.id});" class="absolute top-4 right-4 text-3xl text-white drop-shadow-lg hover:scale-125 active:scale-110 transition z-10">
               ${isWishlisted ? "❤️" : "♡"}
             </button>
-            ${p.isNew ? '<span class="absolute top-4 left-4 bg-lime-400 text-black text-xs font-bold px-2 py-1 rounded z-10">NEW</span>' : ''}
+            ${p.isNew ? '<span class="absolute top-4 left-4 bg-lime-400 text-black text-xs font-bold px-3 py-1 rounded-full z-10">NEW</span>' : ''}
           </div>
           <div class="p-5">
-            <h3 class="font-semibold text-lg mb-1">${p.name}</h3>
+            <h3 class="font-semibold text-lg mb-1 line-clamp-1">${p.name}</h3>
             <p class="text-lime-400 font-medium">$${p.price.toFixed(2)}</p>
-            <button 
-              onclick="event.stopPropagation(); window.addToCartFromShop(${p.id});"
-              class="mt-4 w-full bg-white text-black py-3 rounded-xl font-bold hover:bg-lime-400 transition duration-300"
-            >
+            <button onclick="event.stopPropagation(); window.addToCartFromShop(${p.id});" class="mt-4 w-full bg-gradient-to-r from-white to-zinc-200 text-black py-3 rounded-xl font-bold hover:from-lime-400 hover:to-lime-300 transition duration-300">
               Add to Bag
             </button>
           </div>
         `;
-
         grid.appendChild(card);
       });
     }
 
-    renderNewArrivals();
+    // Initial render + listen for products load if async
+    if (window.products) renderNewArrivals();
+    else document.addEventListener('productsLoaded', renderNewArrivals, { once: true });
   });
   </script>
 
